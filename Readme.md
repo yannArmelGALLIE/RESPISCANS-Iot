@@ -1,7 +1,7 @@
 # RESPISCANS-IoT  
 Firmware IoT du système SmartAirCare composé de deux stations : **AirBand** (portable) et **AirHome** (fixe).
 
-![Last Commit](https://github.com/yannArmelGALLIE/RESPISCANS-Iot.git?style=for-the-badge&logoColor=white)
+![Last Commit](https://img.shields.io/github/last-commit/yannArmelGALLIE/RESPISCANS-Iot.git?style=for-the-badge&logoColor=white)
 
 ---
 
