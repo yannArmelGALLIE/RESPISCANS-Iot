@@ -11,37 +11,13 @@
 #include "get_hum_msg.h"
 #include "get_danger_level.h"
 #include "reconnect_mqtt.h"
-
-// WiFi credentials
-const char* ssid = "CANALBOX-6163-2G";
-const char* password = "3ZvgxDFHca";
-
-// MQTT Broker settings
-const char* mqtt_server = "192.168.1.67";
-const int mqtt_port = 1883;
-const char* mqtt_client_id = "ESP32_Heltec_COM10";
-
-// MQTT Topics - UN SEUL TOPIC POUR DHT22
-const char* topic_dht = "respiscans/dht22";
-const char* topic_lora = "respiscans/lora";
-
-#define DHTPIN 3  
-#define DHTTYPE DHT22
+#include "config.h"
+#include "get_mq2_msg.h"
+#include "publish_dht22_json.h"
+#include "publish_mq2_json.h"
 
 extern SSD1306Wire display;
 
-#define RF_FREQUENCY 915000000
-#define TX_OUTPUT_POWER 14
-#define LORA_BANDWIDTH 0
-#define LORA_SPREADING_FACTOR 7
-#define LORA_CODINGRATE 1
-#define LORA_PREAMBLE_LENGTH 8
-#define LORA_SYMBOL_TIMEOUT 0
-#define LORA_FIX_LENGTH_PAYLOAD_ON false
-#define LORA_IQ_INVERSION_ON false
-
-#define RX_TIMEOUT_VALUE 1000
-#define BUFFER_SIZE 30
 
 char txpacket[BUFFER_SIZE];
 char rxpacket[BUFFER_SIZE];
@@ -165,6 +141,8 @@ void loop()
       lastT = t;
       
       float hi = dht.computeHeatIndex(t, h, false);
+
+      int valueMq2 = analogRead(MQ2PIN);
       
       // Affichage série
       Serial.print(F("T: "));
@@ -173,49 +151,25 @@ void loop()
       Serial.print(h);
       Serial.print(F("%  HI: "));
       Serial.print(hi);
-      Serial.println(F("°C"));
+      Serial.print(F("°C MQ-2: "));
+      Serial.println(valueMq2);
       
       // Publier sur MQTT en JSON
       if (mqttClient.connected()) {
         // Créer le document JSON
-        StaticJsonDocument<300> doc;
-        doc["temperature"] = round(t * 10) / 10.0; 
-        doc["humidity"] = round(h * 10) / 10.0;
-        doc["heatindex"] = round(hi * 10) / 10.0;
-        doc["temp_message"] = get_temp_msg(t);
-        doc["hum_message"] = get_hum_msg(h);
-        doc["danger_level"] = get_danger_level(t, h);
-        doc["timestamp"] = millis();
-        
-        // Sérialiser en string
-        char jsonBuffer[300];
-        serializeJson(doc, jsonBuffer);
-        
-        // Publier
-        if (mqttClient.publish(topic_dht, jsonBuffer)) {
-          Serial.print("Publier sur MQTT: ");
-          Serial.println(jsonBuffer);
-        } else {
-          Serial.println("Echec de la publication sur MQTT");
-        }
+        publish_dht22_json(t, h, hi , mqttClient);
+        publish_mq2_json(valueMq2, mqttClient);
+      
       }
       
       // Affichage OLED
       if (!showingLoRaMessage) {
         display.clear();
         display.setFont(ArialMT_Plain_10);
-        
-        String status = "wifi:";
-        status += WiFi.status() == WL_CONNECTED ? "OK" : "X";
-        status += " mqtt:";
-        status += mqttClient.connected() ? "OK" : "X";
-        display.drawString(0, 0, status + " | COM10");
-        
+        display.drawString(0, 0, "AirHome | Port: COM10");
         display.setFont(ArialMT_Plain_16);
-        display.drawString(0, 14, "T: " + String(t, 2) + "°C");
-        display.drawString(0, 32, "H:" + String(h, 2) + "%");
-        display.setFont(ArialMT_Plain_10);
-        display.drawString(0, 50, get_danger_level(t, h));
+        display.drawString(0, 14,String(t, 2) + "°C | " + String(h, 2) + "%");
+        display.drawString(0, 32, String(valueMq2) + " | ");
         display.display();
       }
     }
