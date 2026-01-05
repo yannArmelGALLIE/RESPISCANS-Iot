@@ -1,0 +1,183 @@
+[
+    {
+        "id": "96a7fb191a13bf9f",
+        "type": "ui-gauge",
+        "z": "cd8f16a266def54a",
+        "name": "MQ-9 (ppm) gauge",
+        "group": "838fb8318bf01613",
+        "order": 4,
+        "value": "payload",
+        "valueType": "msg",
+        "width": "4",
+        "height": "4",
+        "gtype": "gauge-half",
+        "gstyle": "needle",
+        "title": "gauge",
+        "alwaysShowTitle": false,
+        "floatingTitlePosition": "top-left",
+        "units": "ppm",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "0",
+                "color": "#5cd65c",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "10",
+                "color": "#e8d592",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "30",
+                "color": "#e5cd34",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "50",
+                "color": "#dfb643",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "100",
+                "color": "#b39d09",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "200",
+                "color": "#e79c9c",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "400",
+                "color": "#ea5353",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "800",
+                "color": "#ea5353",
+                "text": "",
+                "textType": "label"
+            }
+        ],
+        "min": 0,
+        "max": "800",
+        "sizeThickness": 16,
+        "sizeGap": 4,
+        "sizeKeyThickness": 8,
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "",
+        "x": 730,
+        "y": 1380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "838fb8318bf01613",
+        "type": "ui-group",
+        "name": "MQ-9",
+        "page": "5bf3342e298a1b41",
+        "width": "12",
+        "height": "2",
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "5bf3342e298a1b41",
+        "type": "ui-page",
+        "name": "MQ",
+        "ui": "70d9e11298e7031e",
+        "path": "/page2",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "fd5bec24b8ecb1de",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "70d9e11298e7031e",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": false
+    },
+    {
+        "id": "fd5bec24b8ecb1de",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "245ee1bc05a9348d",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "@flowfuse/node-red-dashboard": "1.30.1"
+        }
+    }
+]

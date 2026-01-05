@@ -13,8 +13,12 @@
 #include "reconnect_mqtt.h"
 #include "config.h"
 #include "get_mq2_msg.h"
+#include "get_mq9_msg.h"
+#include "estimate_co_ppm.h"
 #include "publish_dht22_json.h"
 #include "publish_mq2_json.h"
+#include "publish_mq9_json.h"
+
 
 extern SSD1306Wire display;
 
@@ -143,6 +147,7 @@ void loop()
       float hi = dht.computeHeatIndex(t, h, false);
 
       int valueMq2 = analogRead(MQ2PIN);
+      int valueMq9 = analogRead(MQ9PIN);
       
       // Affichage série
       Serial.print(F("T: "));
@@ -159,6 +164,7 @@ void loop()
         // Créer le document JSON
         publish_dht22_json(t, h, hi , mqttClient);
         publish_mq2_json(valueMq2, mqttClient);
+        publish_mq9_json(valueMq9, mqttClient);
       
       }
       
@@ -166,10 +172,10 @@ void loop()
       if (!showingLoRaMessage) {
         display.clear();
         display.setFont(ArialMT_Plain_10);
-        display.drawString(0, 0, "AirHome | Port: COM10");
+        display.drawString(0, 0, "AirHome --- Port: COM10");
         display.setFont(ArialMT_Plain_16);
-        display.drawString(0, 14,String(t, 2) + "°C | " + String(h, 2) + "%");
-        display.drawString(0, 32, String(valueMq2) + " | ");
+        display.drawString(0, 14, String(t, 2) + "°C | " +  String(h, 2) + "%");
+        display.drawString(0, 32, String(valueMq2) + " | " + String(estimate_co_ppm(valueMq9)) + "ppm");
         display.display();
       }
     }
